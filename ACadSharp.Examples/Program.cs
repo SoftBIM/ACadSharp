@@ -5,6 +5,7 @@ using ACadSharp.IO.DXF;
 using System;
 using System.Diagnostics;
 using System.IO;
+using ACadSharp.Tables;
 
 namespace ACadSharp.Examples
 {
@@ -14,8 +15,8 @@ namespace ACadSharp.Examples
 
 		static void Main(string[] args)
 		{
-			ReadDxf();
-			//ReadDwg();
+			//ReadDxf();
+			ReadDwg();
 		}
 
 		static void ReadDxf()
@@ -33,19 +34,19 @@ namespace ACadSharp.Examples
 			//	CadDocument doc = reader.Read();
 			//}
 
-			string[] files = Directory.GetFiles(PathSamples + "/dwg/", "*.dwg");
-
-			foreach (var f in files)
-			{
-				using (DwgReader reader = new DwgReader(f, onNotification))
-				{
-					CadDocument doc = reader.Read();
-				}
-
-				Console.WriteLine($"file read : {f}");
-				Console.ReadLine();
-			}
-		}
+			//string[] files = Directory.GetFiles(PathSamples + "/dwg/", "*.dwg");
+            string file = @"D:\API\CAD\ACadSharp\samples\sample_base\sample_base.dwg";
+            using (DwgReader reader = new DwgReader(file, onNotification))
+            {
+                CadDocument doc = reader.Read();
+                foreach (Layer docLayer in doc.Layers)
+                {
+                    Console.WriteLine(docLayer.ObjectName);
+                }
+            }
+            Console.WriteLine($"file read : {file}");
+            Console.ReadLine();
+        }
 
 		private static void onNotificationFail(object sender, NotificationEventArgs e)
 		{
